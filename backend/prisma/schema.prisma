@@ -1,0 +1,75 @@
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+generator db {
+    provider = "go run github.com/steebchen/prisma-client-go"
+}
+
+// marks ? 
+model Question {
+    id        String   @id @default(cuid())
+    question  String
+    options   String[]
+    answer    Int
+    marks     Int
+    Section   Section? @relation(fields: [sectionId], references: [id])
+    sectionId String?
+}
+
+model Section {
+    id        String     @id @default(cuid())
+    title     String
+    maxMarks  Int
+    questions Question[]
+    Test      Test?      @relation(fields: [testId], references: [id])
+    testId    String?
+}
+
+model Test {
+    id                String    @id @default(cuid())
+    title             String
+    createdAt         DateTime  @default(now())
+    numberOfQuestions Int
+    maxMarks          Int
+    testTime          Int
+    isLocked          Boolean
+    sections          Section[]
+    Packs             Pack?     @relation(fields: [packsId], references: [id])
+    packsId           String?
+}
+
+model Pack {
+    id          String @id @default(cuid())
+    prize       Int
+    title       String
+    subtitle    String
+    description String
+    batch       String
+    schedule    String // pdf link
+    tests       Test[]
+}
+
+model Attempt {
+    id        String   @id @default(cuid())
+    testId    String
+    userId    String
+    timeTaken Int
+    score     Int // wiill fetch maxMarks from test
+    mistakes  String[]
+    // this will store the incorrect question id as we are not storing the answer marked 
+    // by the user so, no point in creating a seperate relationship
+}
+
+model User {
+    id         String   @id @default(cuid())
+    providerId String?
+    email      String?
+    name       String
+    picture    String?
+    // not creating any many-to-many relationships, keeping it simple,
+    // store the id's and we can backtrack.
+    packs      String[]
+    attempts   String[]
+}
