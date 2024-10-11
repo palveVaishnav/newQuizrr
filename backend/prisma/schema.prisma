@@ -11,7 +11,7 @@ generator db {
 model Question {
     id        String   @id @default(cuid())
     question  String
-    options   String[]
+    options   Json
     answer    Int
     marks     Int
     Section   Section? @relation(fields: [sectionId], references: [id])
