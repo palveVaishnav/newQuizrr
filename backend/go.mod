@@ -3,8 +3,14 @@ module github.com/palvevaishnav/newQuizrr/backend
 go 1.23.2
 
 require (
+	github.com/gofiber/fiber/v2 v2.52.5
+	github.com/joho/godotenv v1.5.1
+	github.com/shopspring/decimal v1.4.0
+	github.com/steebchen/prisma-client-go v0.42.0
+)
+
+require (
 	github.com/andybalholm/brotli v1.0.5 // indirect
-	github.com/gofiber/fiber/v2 v2.52.5 // indirect
 	github.com/google/uuid v1.5.0 // indirect
 	github.com/klauspost/compress v1.17.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
