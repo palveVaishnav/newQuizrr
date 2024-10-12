@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	// "fmt"
     "github.com/gofiber/fiber/v2"
     "github.com/palvevaishnav/newQuizrr/backend/prisma"
     "github.com/palvevaishnav/newQuizrr/backend/prisma/db"
@@ -28,18 +29,23 @@ func QuestionByIdHandler(c *fiber.Ctx) error {
 	}
 	return c.JSON(question)
 }
-
 func QuestionBySectionHandler(c *fiber.Ctx) error {
     client := prisma.GetClient()
-    id := c.Params("sectionId")
-	questions, err := client.Question.FindMany(
-		db.Question.SectionID.Equals(id),
-	).Exec(c.Context())
+    
+    sectionId := c.Params("sectionId")
+	
+    // fmt.Println("Context : ", c)
+    // fmt.Println("All Params: ", c.AllParams())
+    // fmt.Println("Section ID: ", sectionId)
 
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to get test"})
-	}
-	return c.JSON(questions)
+    // Fetch questions by sectionId
+    question, err := client.Question.FindMany(
+        db.Question.SectionID.Equals(sectionId),
+    ).Exec(c.Context())
+
+    // Handle errors and return the response
+    if err != nil {
+        return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to get section questions"})
+    }
+    return c.JSON(question)
 }
-
-

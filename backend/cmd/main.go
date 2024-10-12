@@ -8,24 +8,24 @@ import (
 
 func main() {	
     app := fiber.New()
-	defer prisma.CloseClient()
-
+    defer prisma.CloseClient()
     app.Get("/", handlers.Start)
-	app.Get("/seed",handlers.SeedHandler)
-
+    app.Get("/seed",handlers.SeedHandler)
     app.Get("/packs", handlers.AllPacksHandler)
     app.Get("/tests", handlers.AllTestsHandler)
     app.Get("/sections", handlers.AllSectionsHandler)
     app.Get("/questions", handlers.AllQuestionsHandler)
-    
+
     app.Get("/pack/:id", handlers.PackByIdHandler)
     app.Get("/test/:id", handlers.TestByIdHandler)
     app.Get("/section/:id", handlers.SectionByIdHandler)
     app.Get("/question/:id", handlers.QuestionByIdHandler)
-
     // app.Get("/test/:packId", handlers.TestByPackHandler)
+    
+    
     app.Get("/pack/tests/:packId", handlers.TestByPackHandler)
     app.Get("/test/sections/:testId", handlers.SectionByTestHandler)
-    app.Get("/section/questions/:sectionId ", handlers.QuestionBySectionHandler)
+    // app.Get("/section/questions/:sectionId ", handlers.QuestionBySectionHandler)  this isn't working, don't know why !!
+    app.Get("/section/:sectionId/questions", handlers.QuestionBySectionHandler)   // this works
     app.Listen(":8080")
 }
