@@ -1,94 +1,42 @@
-package main
+package seed
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"log"
-	"time"
 
-	"github.com/steebchen/prisma-client-go/runtime/transaction"
 	"github.com/palvevaishnav/newQuizrr/backend/prisma"
+    "github.com/palvevaishnav/newQuizrr/backend/prisma/db"
+	"github.com/steebchen/prisma-client-go/runtime/types"
 )
 
-func main() {
-	client := prisma.NewClient()
-	defer client.Disconnect()
-
-	ctx := context.Background()
-
-	// Start a transaction to ensure consistency
-	tx, err := client.$transaction.Begin(ctx, transaction.Options{})
-	if err != nil {
-		log.Fatalf("failed to start transaction: %v", err)
+func SeedDatabase() {
+	if err := seed(); err != nil {
+		log.Fatalf("Error seeding data: %v", err)
 	}
+}
 
-	// Seed Questions
-	question1, err := client.Question.CreateOne(
-		prisma.Question.Question.Set("What is the capital of France?"),
-		prisma.Question.Options.Set([]string{"Paris", "London", "Berlin", "Rome"}),
-		prisma.Question.Answer.Set(0), // correct answer index
-		prisma.Question.Marks.Set(5),
-	).Exec(ctx)
-	if err != nil {
-		tx.Rollback(ctx)
-		log.Fatalf("failed to create question1: %v", err)
+func seed() error {
+	// Initialize Prisma client	
+	client := prisma.GetClient()
+	if err := client.Prisma.Connect(); err != nil {
+		return err
 	}
+	defer client.Prisma.Disconnect()
 
-	question2, err := client.Question.CreateOne(
-		prisma.Question.Question.Set("Which planet is known as the Red Planet?"),
-		prisma.Question.Options.Set([]string{"Earth", "Mars", "Jupiter", "Venus"}),
-		prisma.Question.Answer.Set(1), // correct answer index
-		prisma.Question.Marks.Set(5),
-	).Exec(ctx)
-	if err != nil {
-		tx.Rollback(ctx)
-		log.Fatalf("failed to create question2: %v", err)
+	Ctx := context.Background()
+
+	packOne,err := client.Pack.CreateOne(
+		db.Pack.Prize.Set(4000),
+		db.Pack.Title.Set("Pack - 01"),
+		db.Pack.Subtitle.Set("Subtitle of the pack"),
+		db.Pack.Description.Set("Descriptions of the pack"),
+		db.Pack.Batch.Set("October Batch"),
+		db.Pack.Schedule.Set("https://vaishnav.info"),
+	).Exec(Ctx)
+	if err != nil{
+		return fmt.Errorf
 	}
-
-	// Seed Section
-	section1, err := client.Section.CreateOne(
-		prisma.Section.Title.Set("Geography"),
-		prisma.Section.MaxMarks.Set(10),
-		prisma.Section.Questions.Link([]string{question1.ID, question2.ID}),
-	).Exec(ctx)
-	if err != nil {
-		tx.Rollback(ctx)
-		log.Fatalf("failed to create section: %v", err)
-	}
-
-	// Seed Test
-	test1, err := client.Test.CreateOne(
-		prisma.Test.Title.Set("General Knowledge Test"),
-		prisma.Test.CreatedAt.Set(time.Now()),
-		prisma.Test.NumberOfQuestions.Set(2),
-		prisma.Test.MaxMarks.Set(10),
-		prisma.Test.TestTime.Set(60),
-		prisma.Test.IsLocked.Set(false),
-		prisma.Test.Sections.Link([]string{section1.ID}),
-	).Exec(ctx)
-	if err != nil {
-		tx.Rollback(ctx)
-		log.Fatalf("failed to create test: %v", err)
-	}
-
-	// Seed Pack
-	_, err = client.Pack.CreateOne(
-		prisma.Pack.Title.Set("Quiz Pack 1"),
-		prisma.Pack.Prize.Set(100),
-		prisma.Pack.Subtitle.Set("First Quiz Pack"),
-		prisma.Pack.Description.Set("A pack of various tests"),
-		prisma.Pack.Batch.Set("Batch A"),
-		prisma.Pack.Schedule.Set("http://example.com/schedule.pdf"),
-		prisma.Pack.Tests.Link([]string{test1.ID}),
-	).Exec(ctx)
-	if err != nil {
-		tx.Rollback(ctx)
-		log.Fatalf("failed to create pack: %v", err)
-	}
-
-	// Commit the transaction
-	if err := tx.Commit(ctx); err != nil {
-		log.Fatalf("failed to commit transaction: %v", err)
-	}
-
-	log.Println("Seeding completed successfully!")
+	return nil
 }

@@ -13,6 +13,6 @@ func main() {
     app.Get("/", handlers.Start)
     app.Get("/tests", handlers.AllTestsHandler)
 	app.Post("/question",handlers.AddQuestionHandler)
-
+	app.Get("/pack",handlers.AddPackHandler)
     app.Listen(":8080")
 }
