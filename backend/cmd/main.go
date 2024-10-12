@@ -26,6 +26,8 @@ func main() {
     // app.Get("/test/:packId", handlers.TestByPackHandler)
     app.Get("/pack/tests/:packId", handlers.TestByPackHandler)
     app.Get("/test/sections/:testId", handlers.SectionByTestHandler)
-    app.Get("/section/questions/:sectionId ", handlers.QuestionBySectionHandler)
+    // app.Get("/section/questions/:sectionId ", handlers.QuestionBySectionHandler)  this isn't working, don't know why !!
+    app.Get("/section/:sectionId/questions", handlers.QuestionBySectionHandler)   // this works
+
     app.Listen(":8080")
 }
