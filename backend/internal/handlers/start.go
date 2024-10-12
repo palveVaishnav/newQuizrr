@@ -5,7 +5,5 @@ import (
 )
 
 func Start(c *fiber.Ctx) error {
-    return c.SendString("From Kam kr raha hai")
+    return c.Status(200).SendString("Backend Kam kr raha hai")
 }
-
-
