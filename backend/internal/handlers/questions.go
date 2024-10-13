@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"fmt"
+	// "fmt"
     "github.com/gofiber/fiber/v2"
     "github.com/palvevaishnav/newQuizrr/backend/prisma"
     "github.com/palvevaishnav/newQuizrr/backend/prisma/db"
@@ -29,6 +29,7 @@ func QuestionByIdHandler(c *fiber.Ctx) error {
 	}
 	return c.JSON(question)
 }
+
 func QuestionBySectionHandler(c *fiber.Ctx) error {
     client := prisma.GetClient()
     

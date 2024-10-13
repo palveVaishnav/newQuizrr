@@ -41,3 +41,21 @@ func TestByPackHandler(c *fiber.Ctx) error{
     return c.JSON(test)
 }
 
+func CompleteTest(c *fiber.Ctx) error{
+    client := prisma.GetClient()
+    testId := c.Params("id")
+    completeTest, err := client.Test.FindUnique(
+        db.Test.ID.Equals(testId),
+    ).With(
+        db.Test.Sections.Fetch().With(
+            db.Section.Questions.Fetch(), // Fetch questions for each section
+        ),
+    ).Exec(c.Context())
+    if err != nil {
+        return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to get complete test"})
+    }
+
+    // Return the complete test data (with sections and questions)
+    return c.JSON(completeTest)
+}
+

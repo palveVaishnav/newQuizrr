@@ -4,11 +4,17 @@ import (
     "github.com/gofiber/fiber/v2"
     "github.com/palvevaishnav/newQuizrr/backend/internal/handlers"
     "github.com/palvevaishnav/newQuizrr/backend/prisma"
+    "github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func main() {	
     app := fiber.New()
 	defer prisma.CloseClient()
+
+    app.Use(cors.New(cors.Config{
+		AllowOrigins: "*",
+		AllowHeaders: "Origin, Content-Type, Accept",
+	}))
 
     app.Get("/", handlers.Start)
 	app.Get("/seed",handlers.SeedHandler)
@@ -28,6 +34,8 @@ func main() {
     app.Get("/test/sections/:testId", handlers.SectionByTestHandler)
     // app.Get("/section/questions/:sectionId ", handlers.QuestionBySectionHandler)  this isn't working, don't know why !!
     app.Get("/section/:sectionId/questions", handlers.QuestionBySectionHandler)   // this works
+
+    app.Get("/exam/:id", handlers.CompleteTest)   // this works
 
     app.Listen(":8080")
 }
