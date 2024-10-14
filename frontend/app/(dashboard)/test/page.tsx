@@ -6,6 +6,7 @@ import { Clock, FileText, CheckCircle, LockIcon } from "lucide-react"
 import Image from "next/image"
 import { useRecoilValue } from "recoil"
 import { currentTest } from "@/state/test"
+import Link from "next/link"
 
 export default function TestInstructionsAndInfo() {
     const test = useRecoilValue(currentTest);
@@ -54,9 +55,11 @@ export default function TestInstructionsAndInfo() {
                                     <p className="text-sm text-gray-500 mt-2">You need to join the pack to access this test.</p>
                                 </>
                                 :
-                                <Button className="mt-4 bg-green-500 hover:bg-green-600">
-                                    Attempt Now
-                                </Button>
+                                <Link href={'/test/live'}>
+                                    <Button className="mt-4 bg-green-500 hover:bg-green-600">
+                                        Attempt Now
+                                    </Button>
+                                </Link>
                             }
                         </div>
                         <div className="hidden md:block">

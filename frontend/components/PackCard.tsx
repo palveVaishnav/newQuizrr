@@ -11,7 +11,9 @@ import { useEffect, useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { currentPack, relatedTests } from "@/state/pack";
 
+// main function  
 export const AllPacks = ({ packs }: { packs: packType[] }) => {
+    console.log("Packs : ", packs)
     const RenderPacks = () => packs.map((pack) => (
         <PackCard key={pack.id} pack={pack} />
     ))
@@ -28,20 +30,46 @@ const PackCard = ({ pack }: { pack: packType }) => {
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        setSelectedPack(pack)
+        // check if this is required.  This  We are only rendering all packs once , so  i think we should start state from tests and not packs 
+        // 
+        setSelectedPack(pack);
+        setTests([]);
+
         const fetchTests = async () => {
             try {
                 const response = await axios.get(`${process.env.NEXT_PUBLIC_API}/pack/tests/${pack.id}`);
                 setTests(response.data);
-                console.log("once");
+                console.log("Fetched tests for pack:", pack.id);
             } catch (error) {
                 console.error("Failed to fetch tests:", error);
             } finally {
                 setLoading(false);
             }
         };
+
         fetchTests();
     }, [pack, setTests, setSelectedPack]);
+
+
+    const AllTests = () => tests.map((test) => (
+        <div className="flex items-center justify-between p-4 border-b border-gray-700" key={test.id}>
+            <div className="flex items-center space-x-2">
+                <Image
+                    alt="jee main"
+                    width={10}
+                    height={10}
+                    src="https://cdn.quizrr.in/web-assets/icons/exams/jee-main.png"
+                    className="w-8"
+                />
+                <span>{test.title} - {pack.batch}</span>
+            </div>
+            <Link href={`/packs/overview`}>
+                <Button variant="secondary" className="text-sm">
+                    View Tests
+                </Button>
+            </Link>
+        </div>
+    ))
 
     return (
         <Card className="w-full max-w-sm relative border border-black p-2 bgreplace">
@@ -91,25 +119,7 @@ const PackCard = ({ pack }: { pack: packType }) => {
                                 ) : tests.length === 0 ? (
                                     <p>No tests available!</p>
                                 ) : (
-                                    tests.map((test) => (
-                                        <div className="flex items-center justify-between p-4 border-b border-gray-700" key={test.id}>
-                                            <div className="flex items-center space-x-2">
-                                                <Image
-                                                    alt="jee main"
-                                                    width={10}
-                                                    height={10}
-                                                    src="https://cdn.quizrr.in/web-assets/icons/exams/jee-main.png"
-                                                    className="w-8"
-                                                />
-                                                <span>{test.title} - {pack.batch}</span>
-                                            </div>
-                                            <Link href={`/packs/overview`}>
-                                                <Button variant="secondary" className="text-sm">
-                                                    View Tests
-                                                </Button>
-                                            </Link>
-                                        </div>
-                                    ))
+                                    <AllTests />
                                 )}
                             </div>
                         </DialogHeader>
