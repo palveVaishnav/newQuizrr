@@ -1,3 +1,5 @@
+import { testType } from "./test"
+
 export interface packType {
     id: number
     title: string
@@ -7,3 +9,8 @@ export interface packType {
     prize: number
     schedule: string
 }
+
+export interface packWithTestType extends packType {
+    tests: testType[]
+}
+

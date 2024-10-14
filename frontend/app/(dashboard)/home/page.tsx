@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { useRouter } from "next/navigation";
 import { ProviderUser } from "@/state/user";
 import axios from "axios";
@@ -10,7 +10,7 @@ import { AllPacks } from "@/components/PackCard";
 
 export default function Home() {
     const { data: session, status } = useSession();
-    const [user, setUser] = useRecoilState(ProviderUser);
+    const user = useRecoilValue(ProviderUser);
     const [packs, setPacks] = useState<packType[]>([]);
     const router = useRouter();
 
@@ -24,17 +24,8 @@ export default function Home() {
                 console.log("Failed to fetch packs");
             }
         };
-        if (session && session.user) {
-            // Store the session data in Recoil state
-            setUser({
-                providerId: session.user.id || "",
-                name: session.user.name || "",
-                email: session.user.email || "",
-                picture: session.user.image || "",
-            });
-            getPacks();
-        }
-    }, [session, setUser]);
+        getPacks();
+    }, [session, setPacks, packs]);
 
     if (status === "loading") {
         return <p>Loading...</p>;
