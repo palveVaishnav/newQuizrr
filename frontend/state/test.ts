@@ -39,6 +39,9 @@ export const examAtom = atom<examType>({
         get: async ({ get }) => {
             try {
                 const testToFetch = get(currentTest)
+                if (!testToFetch) {
+                    throw new Error("Current test hi set nahi hai")
+                }
                 const res = await axios.get(`${process.env.NEXT_PUBLIC_API}/exam/${testToFetch?.id}`)
                 const test = res.data;
                 return test;

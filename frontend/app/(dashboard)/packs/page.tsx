@@ -1,48 +1,22 @@
 "use client";
-import { Button } from "@/components/ui/button";
+import PackCard from "@/components/PackCard";
+import { Separator } from "@/components/ui/separator";
 import { allPacksSelector } from "@/state/pack";
-import { packWithTests } from "@/types/pack";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { packWithTests } from '@/types/pack';
 import { useRecoilValue } from "recoil";
-
 export default function Home() {
-    const { data: session, status } = useSession();
-    const router = useRouter();
-    const packs: packWithTests[] = useRecoilValue(allPacksSelector)
-    if (status === "loading") {
-        return <p>Loading...</p>;
-    }
 
-    if (!session) {
-        router.push("/");
-        return null;
-    }
+    const packs: packWithTests[] = useRecoilValue(allPacksSelector)
     console.log(packs)
     return (
-        <div>
-            <h1>Available Packs:</h1>
-            <div>
-                {packs.length > 0 ? (
-                    packs.map(pack => (
-                        <div key={pack.id} className="border m-2">
-                            <h3>{pack.title}</h3>
-                            <ul>
-                                {pack.tests.map(test => (
-                                    <li key={test.id}>{test.title}</li>
-                                ))}
-                            </ul>
-                            <Button
-                                onClick={() =>
-                                    router.push(`/packs/${pack.id}`)
-                                }
-                            >view Pack</Button>
-                        </div>
-                    ))
-                ) : (
-                    <div>Loading...</div>
-                )}
+        <div className="mt-20">
+            <span className="text-xl font-semibold">Available Packs:</span>
+            <Separator />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 p-10">
+                {packs.map((pack, index) => (
+                    <PackCard key={index} {...pack} />
+                ))}
             </div>
-        </div>
+        </div >
     );
 }
