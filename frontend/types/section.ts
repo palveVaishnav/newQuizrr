@@ -1,8 +1,15 @@
+import { questionType } from "./question"
+
 export interface sectionType {
-    id: string
-    title: string
-    maxMark: number
-    testId: string
+  id: string
+  title: string
+  maxMark: number
+  testId: string
+}
+
+
+export interface sectionWithQuestionType extends sectionType {
+  questions: questionType[]
 }
 
 

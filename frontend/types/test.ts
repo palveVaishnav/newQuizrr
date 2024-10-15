@@ -1,13 +1,25 @@
+import { sectionType, sectionWithQuestionType } from "./section"
+
 export interface testType {
-    id: string
-    title: string
-    created: string
-    numberOfQuestions: number
-    maxMarks: number
-    testTime: number
-    isLocked: boolean
-    packsId: string
+  id: string
+  title: string
+  created: string
+  numberOfQuestions: number
+  maxMarks: number
+  testTime: number
+  isLocked: boolean
+  packsId: string
 }
+
+export interface testWithSectionType extends testType {
+  sections: sectionType[]
+}
+
+export interface examType extends testType {
+  sections: sectionWithQuestionType[]
+}
+
+
 
 /**
  * {

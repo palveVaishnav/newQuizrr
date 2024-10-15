@@ -1,29 +1,15 @@
 "use client";
-import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { allPacksSelector } from "@/state/pack";
+import { packWithTests } from "@/types/pack";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
-import { packType } from "@/types/pack";
-import { AllPacks } from "@/components/PackCard";
+import { useRecoilValue } from "recoil";
 
 export default function Home() {
     const { data: session, status } = useSession();
-    const [packs, setPacks] = useState<packType[]>([]);
     const router = useRouter();
-
-    useEffect(() => {
-        const getPacks = async () => {
-            try {
-                const response = await axios.get(`http://127.0.0.1:8080/packs`);
-                console.log(response.data);
-                setPacks(response.data);
-            } catch {
-                console.log("Failed to fetch packs");
-            }
-        };
-        getPacks();
-    }, []);
-
+    const packs: packWithTests[] = useRecoilValue(allPacksSelector)
     if (status === "loading") {
         return <p>Loading...</p>;
     }
@@ -32,11 +18,31 @@ export default function Home() {
         router.push("/");
         return null;
     }
-
+    console.log(packs)
     return (
         <div>
             <h1>Available Packs:</h1>
-            {packs.length > 0 && <AllPacks packs={packs} />}
+            <div>
+                {packs.length > 0 ? (
+                    packs.map(pack => (
+                        <div key={pack.id} className="border m-2">
+                            <h3>{pack.title}</h3>
+                            <ul>
+                                {pack.tests.map(test => (
+                                    <li key={test.id}>{test.title}</li>
+                                ))}
+                            </ul>
+                            <Button
+                                onClick={() =>
+                                    router.push(`/packs/${pack.id}`)
+                                }
+                            >view Pack</Button>
+                        </div>
+                    ))
+                ) : (
+                    <div>Loading...</div>
+                )}
+            </div>
         </div>
     );
 }
