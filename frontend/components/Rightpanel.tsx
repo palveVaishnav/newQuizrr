@@ -1,8 +1,6 @@
 import {
-    AlertTriangle,
     Bell,
     Book,
-    Bookmark,
     Home,
     Package2,
     User,
@@ -41,25 +39,11 @@ export default function RightPanel() {
                             Packs
                         </Link>
                         <Link
-                            href="/tests"
-                            className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                        >
-                            <Book className="h-4 w-4" />
-                            Tests
-                        </Link>
-                        <Link
-                            href="/notebook"
-                            className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                        >
-                            <Bookmark className="h-4 w-4" />
-                            Notebooks
-                        </Link>
-                        <Link
                             href="/results"
                             className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                         >
-                            <AlertTriangle className="h-4 w-4" />
-                            Results
+                            <Book className="h-4 w-4" />
+                            Test Results
                         </Link>
                         <Link
                             href="/profile"
