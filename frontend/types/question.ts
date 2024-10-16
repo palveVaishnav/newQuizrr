@@ -3,7 +3,7 @@ export interface questionType {
     question: string,
     answer: number,
     marks: number,
-    options: string[],   //JSON.parse(data.options),
+    options: string,   //JSON.parse(data.options),
     userAnswer: number,
 }
 
