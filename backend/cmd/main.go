@@ -37,5 +37,10 @@ func main() {
 
     app.Get("/exam/:id", handlers.CompleteTest)   // this works
 
+
+    app.Get("/attempts",handlers.AllAttempts)
+    // post requests 
+    app.Post("/attempt",handlers.AttemptHandler)
+
     app.Listen(":8080")
 }
