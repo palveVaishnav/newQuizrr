@@ -1,12 +1,20 @@
 export interface questionType {
-    id: string,
-    question: string,
-    answer: number,
-    marks: number,
-    options: string[],   //JSON.parse(data.options),
-    userAnswer: number,
+  id: string,
+  question: string,
+  answer: number,
+  marks: number,
+  options: string,   //JSON.parse(data.options),
+  userAnswer: number,
+  status: questionStatus,
 }
 
+export enum questionStatus {
+  notVisited,
+  answered,
+  notAnswered,
+  marked,
+  markedAnswered
+}
 
 
 
