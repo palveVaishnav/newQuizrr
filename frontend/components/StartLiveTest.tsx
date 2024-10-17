@@ -32,9 +32,6 @@ const QuestionComp: React.FC<{ question: questionType; onAnswerChange: (index: n
 
 export default function TestComponent() {
     const [test, setTest] = useRecoilState<examType>(examAtom)
-    // const [loading, setLoading] = useState(true);
-    // const [error, setError] = useState<string | null>(null);
-    // interaction handling
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [currentSection, setCurrentSection] = useState(0);
     const [submitting, setSubmitting] = useState(false);
@@ -47,10 +44,11 @@ export default function TestComponent() {
             return;
         }
 
-        setSubmitting(true); // Set submitting state to true
+        setSubmitting(true);
 
         try {
-            navigate.push('/submitpage');
+            setTest(test)
+            navigate.push('/livetest/submit');
 
         } catch (error) {
             console.error("Error during submission:", error);
@@ -98,6 +96,8 @@ export default function TestComponent() {
         setCurrentSection(index);
         setCurrentQuestion(0); // Reset question number when switching sections
     };
+
+    console.log(test.sections[currentSection].questions[currentQuestion]);
 
     return (
         <div className="flex flex-col text-left h-screen p-0">
@@ -251,7 +251,7 @@ export default function TestComponent() {
                                                 className={`w-10 h-10 border rounded-md     
                                                     ${question.status === questionStatus.notVisited ? 'border border-blue-500 rounded-md' : ''}
                                                     ${question.status === questionStatus.answered ? ' bg-green-500 polygonUp  overflow-hidden' : 'overflow-hidden'}
-                                                    ${question.status === questionStatus.notAnswered ? ' bg-red-500 polygonDown' : ''}
+                                                    ${question.userAnswer === -1 ? ' bg-red-500 polygonDown' : ''}
                                                     ${question.status === questionStatus.marked ? 'bg-purple-500 rounded-full' : ''}
                                                     ${question.status === questionStatus.markedAnswered ? 'bg-purple-500 text-white border-green-500' : ''}
                                                     `}
@@ -273,7 +273,7 @@ export default function TestComponent() {
                         <div className='flex gap-2'>
                             <button className="border text-gray-800 px-10 py-2 "
                                 onClick={() => {
-                                    const ans = test.sections[currentSection].questions[currentQuestion].answer;
+                                    const ans = test.sections[currentSection].questions[currentQuestion].userAnswer;
                                     // section id, question id and changes
                                     handleUpdateQuestion(test.sections[currentSection].id, test.sections[currentSection].questions[currentQuestion].id, { status: ans === -1 ? questionStatus.marked : questionStatus.markedAnswered })
                                     if (currentQuestion < test.sections[currentSection].questions.length - 1) {
@@ -287,7 +287,7 @@ export default function TestComponent() {
                             </button>
                             <button className="border text-gray-800 px-10 py-2 "
                                 onClick={() =>
-                                    handleUpdateQuestion(test.sections[currentSection].id, test.sections[currentSection].questions[currentQuestion].id, { status: questionStatus.notAnswered, answer: -1 })
+                                    handleUpdateQuestion(test.sections[currentSection].id, test.sections[currentSection].questions[currentQuestion].id, { status: questionStatus.notAnswered, userAnswer: -1 })
                                 }
                             >
                                 Clear Response
@@ -296,8 +296,8 @@ export default function TestComponent() {
                         <div className='flex gap-10 mr-20'>
                             <button className="bg-blue-500 text-white px-10 py-2"
                                 onClick={() => {
-                                    const ans = test.sections[currentSection].questions[currentQuestion].answer;
-                                    handleUpdateQuestion(test.sections[currentSection].id, test.sections[currentSection].questions[currentQuestion].id, { status: ans === -1 ? questionStatus.notAnswered : questionStatus.answered, answer: ans })
+                                    const ans = test.sections[currentSection].questions[currentQuestion].userAnswer;
+                                    handleUpdateQuestion(test.sections[currentSection].id, test.sections[currentSection].questions[currentQuestion].id, { status: ans === -1 ? questionStatus.notAnswered : questionStatus.answered, userAnswer: ans })
                                     if (currentQuestion < test.sections[currentSection].questions.length - 1) {
                                         setCurrentQuestion((prevQuestion) => prevQuestion + 1);
                                     } else {
