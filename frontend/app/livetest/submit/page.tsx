@@ -1,6 +1,7 @@
 "use client"
 import { examAtom } from "@/state/exam"
 import { questionType } from "@/types/question"
+import axios from "axios"
 import { useSession } from "next-auth/react"
 import { atom, useRecoilValue } from "recoil"
 
@@ -38,7 +39,7 @@ export default function Submit() {
             }
         });
     });
-    const newSubmitHandler = () => {
+    const newSubmitHandler = async () => {
         const newAttempt: attemptType = {
             testId: exam.id,
             userId: session?.user?.email || "",
@@ -48,6 +49,17 @@ export default function Submit() {
         }
         console.log(newAttempt)
         // send a post request and redirect user if it is successful.
+        try {
+            const res = await axios.post(`${process.env.NEXT_PUBLIC_API}/attempt`, newAttempt, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            console.log("Sent Successfully : ", res.data)
+        } catch (error) {
+            console.log("Error aa gaya : ", error)
+        }
     }
 
 

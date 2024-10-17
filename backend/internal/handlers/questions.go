@@ -23,7 +23,7 @@ func QuestionByIdHandler(c *fiber.Ctx) error {
 	question, err := client.Question.FindUnique(
 		db.Question.ID.Equals(id),
 	).Exec(c.Context())
-
+    
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to get test"})
 	}
