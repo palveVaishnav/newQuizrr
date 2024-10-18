@@ -54,11 +54,11 @@ export default function RightPanel() {
                         </Link>
                     </nav>
                 </div>
-                <div className="mt-auto p-4 grid place-content-center w-full">
+                {/* <div className="mt-auto p-4 grid place-content-center w-full">
                     <Button>
                         Help and support
                     </Button>
-                </div>
+                </div> */}
             </div>
         </div>
     )
