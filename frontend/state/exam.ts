@@ -23,3 +23,7 @@ export const examAtom = atom<examType>({
     })
 
 })
+
+
+
+

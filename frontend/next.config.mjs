@@ -14,6 +14,9 @@ const nextConfig = {
             {
                 hostname: 'app.quizrr.in',
             },
+            {
+                hostname: 'avatar.iran.liara.run',
+            },
         ],
     },
 };
