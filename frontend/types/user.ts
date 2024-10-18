@@ -4,3 +4,14 @@ export interface googleUser {
     email: string
     picture: string
 }
+
+
+export interface userType {
+    id: string,
+    providerId?: string,
+    email: string,
+    name: string,
+    picture: string,
+    packs?: string[],
+    attempts: string[],
+}
