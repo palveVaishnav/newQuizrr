@@ -9,9 +9,9 @@ export default function Success() {
                 Test Submitted
                 <CircleCheckBig className="text-green-500" size={48} />
             </span>
-            <Link href={'/home'} >
+            <Link href={'/result'} >
                 <Button>
-                    Go to Dashboard
+                    View Leaderbaord
                 </Button>
             </Link>
         </div>

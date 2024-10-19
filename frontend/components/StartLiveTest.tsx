@@ -3,7 +3,7 @@ import { useRecoilState } from 'recoil';
 import { examAtom } from '@/state/exam';
 import { questionStatus, questionType } from '@/types/question';
 import { Check, ChevronDown, ChevronRight, Info } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { examType } from '@/types/test';
 import { useRouter } from 'next/navigation';
 
@@ -30,11 +30,13 @@ const QuestionComp: React.FC<{ question: questionType; onAnswerChange: (index: n
     );
 };
 
+
 export default function TestComponent() {
     const [test, setTest] = useRecoilState<examType>(examAtom)
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [currentSection, setCurrentSection] = useState(0);
     const [submitting, setSubmitting] = useState(false);
+    const [timeLeft, setTimeLeft] = useState(test.testTime * 60) // stored as minutes, converting to sec for timer
 
     // Function to handle form submission
     const navigate = useRouter();
@@ -100,6 +102,28 @@ export default function TestComponent() {
 
     console.log(test.sections[currentSection].questions[currentQuestion]);
 
+    // handle timer
+    useEffect(() => {
+        if (timeLeft == 0) {
+            handleSubmit();
+            alert("Time's Up !!");
+            return;
+        }
+        const timer = setInterval(() => {
+            setTimeLeft((prev) => prev - 1)
+        }, 1000)
+        return () => clearInterval(timer)
+    }, [timeLeft])
+    const formatTime = (seconds: number) => {
+        const h = Math.floor(seconds / 3600).toString()
+            .padStart(2, "0");   // ensures two digits 
+        const m = Math.floor((seconds % 3600) / 60).toString()
+            .padStart(2, "0");
+        const s = (seconds % 60).toString()
+            .padStart(2, "0");
+        return `${h}:${m}:${s}`;
+    };
+
     return (
         <div className="flex flex-col text-left h-screen p-0">
             {test && (
@@ -116,11 +140,13 @@ export default function TestComponent() {
                                 <Info size={16} className="bg-blue-400 rounded-full" />
                             </button>
                         </div>
+
                         <p>Time Left:
                             <span className='bg-black py-1 px-2 rounded-xl'>
-                                {test.testTime}
+                                {formatTime(timeLeft)}
                             </span>
                         </p>
+
                         <div className="flex items-center space-x-4">
                             <button className="px-2 py-1 rounded flex items-center space-x-1">
                                 <Info size={16} className='bg-green-500 rounded-xl' />
@@ -302,7 +328,10 @@ export default function TestComponent() {
                                     handleUpdateQuestion(test.sections[currentSection].id, test.sections[currentSection].questions[currentQuestion].id, { status: ans === -1 ? questionStatus.notAnswered : questionStatus.answered, userAnswer: ans })
                                     if (currentQuestion < test.sections[currentSection].questions.length - 1) {
                                         setCurrentQuestion((prevQuestion) => prevQuestion + 1);
-                                    } else {
+                                    } else if (currentSection === test.sections.length - 1) {
+                                        handleSubmit();   // last question of the last section 
+                                    }
+                                    else {
                                         handleSectionSwitch(currentSection + 1)
                                     }
                                 }}
