@@ -84,17 +84,18 @@ export default function TestComponent() {
             };
         });
 
-        setTest({ ...test, sections: updatedSections }); // Update the state
+        setTest({ ...test, sections: updatedSections });
     };
 
 
     // Function to handle section switch
+    // why isn't this working ??
     const handleSectionSwitch = (index: number) => {
         if (!test) return;
         if (index > test?.sections.length - 1) handleSubmit()
 
         setCurrentSection(index);
-        setCurrentQuestion(0); // Reset question number when switching sections
+        setCurrentQuestion(0);
     };
 
     console.log(test.sections[currentSection].questions[currentQuestion]);
@@ -295,6 +296,7 @@ export default function TestComponent() {
                         </div>
                         <div className='flex gap-10 mr-20'>
                             <button className="bg-blue-500 text-white px-10 py-2"
+                                // this should work !! I guess some logical issue, will look into this...
                                 onClick={() => {
                                     const ans = test.sections[currentSection].questions[currentQuestion].userAnswer;
                                     handleUpdateQuestion(test.sections[currentSection].id, test.sections[currentSection].questions[currentQuestion].id, { status: ans === -1 ? questionStatus.notAnswered : questionStatus.answered, userAnswer: ans })

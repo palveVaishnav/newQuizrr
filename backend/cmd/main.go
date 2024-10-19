@@ -18,6 +18,7 @@ func main() {
 
     app.Get("/", handlers.Start)
 	app.Get("/seed",handlers.SeedHandler)
+    app.Post("/user", handlers.UserLoginHandler)
 
     app.Get("/packs", handlers.AllPacksHandler)
     app.Get("/tests", handlers.AllTestsHandler)

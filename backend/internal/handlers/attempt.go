@@ -45,7 +45,7 @@ func AttemptHandler(c *fiber.Ctx) error{
 		fmt.Println("Parsing nahi ho rahi :",err)
 		return c.Status(500).SendString("Parsing Error")
 	}
-	fmt.Println("Hogayi !!, data okay")
+	// fmt.Println("Hogayi !!, data okay")
 
 	// add to DB
 	_,err := client.Attempt.CreateOne(
