@@ -1,5 +1,6 @@
 import GoogleProvider from 'next-auth/providers/google';
 import type { NextAuthOptions } from 'next-auth';
+import axios from 'axios';
 
 export const NEXT_AUTH_CONFIG: NextAuthOptions = {
     providers: [
@@ -18,6 +19,20 @@ export const NEXT_AUTH_CONFIG: NextAuthOptions = {
                 token.id = profile.sub;
                 token.email = profile.email;
                 token.name = profile.name;
+                token.picture = profile.image;
+                try {
+                    const res = await axios.post(`${process.env.NEXT_PUBLIC_API}/user`, {
+                        providerId: profile.sub,
+                        email: profile.email,
+                        name: profile.name,
+                        picture: profile.image,
+                    })
+                    const user = res.data
+                    console.log(user)
+                    // Add to atom. 
+                } catch (error) {
+                    console.log("Request me kuch dikkat hai: ", error)
+                }
             }
             return token;
         },
@@ -35,7 +50,7 @@ export const NEXT_AUTH_CONFIG: NextAuthOptions = {
         },
 
         async redirect() {
-            return '/home'; // Redirect to /dashboard after successful login
+            return '/home'; //  after successful login
         },
     },
 };

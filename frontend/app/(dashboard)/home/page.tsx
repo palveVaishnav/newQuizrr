@@ -1,6 +1,6 @@
 "use client";
 
-import { Charts } from "@/components/HomeTemplete";
+// import { Charts } from "@/components/HomeTemplete";
 
 export default function Home() {
     return (
@@ -9,7 +9,7 @@ export default function Home() {
                 Render user data , show some charts and stuff with attempted tests stats and results
                 Show packs bought. For Example :
             </span>
-            <Charts />
+            {/* <Charts /> */}
         </div>
     )
 }

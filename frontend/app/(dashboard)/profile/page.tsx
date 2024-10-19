@@ -8,7 +8,7 @@ import { LogOut, Mail, Phone, MapPin } from "lucide-react"
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Switch } from "@/components/ui/switch"
-
+import { signOut } from 'next-auth/react';
 export default function Component() {
     const { data: session, status } = useSession();
     const router = useRouter()
@@ -20,12 +20,16 @@ export default function Component() {
         router.push("/");
         return null;
     }
+    const handleSignOut = async () => {
+      await signOut({ redirect: '/' });
+    };
+
     return (
         <div className="min-h-screen bg-white p-8">
             <div className="mx-auto max-w-4xl">
                 <div className="mb-8 flex items-center justify-between">
                     <h1 className="text-3xl font-bold text-gray-900">Account</h1>
-                    <Button variant="outline">
+                    <Button variant="outline" onClick={handleSignOut}>
                         <LogOut className="mr-2 h-4 w-4" />
                         Logout
                     </Button>
