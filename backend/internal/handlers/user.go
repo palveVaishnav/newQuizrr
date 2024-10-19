@@ -36,9 +36,9 @@ func UserLoginHandler(c *fiber.Ctx) error{
 		fmt.Println("No record Found, Let's Create one !!")
 		// create here
 		createdUser ,err := client.User.CreateOne(			
+			db.User.Name.Set(receivedUser.Name),
 			db.User.ProviderID.Set(receivedUser.ProviderID),  
 			db.User.Email.Set(receivedUser.Email),
-			db.User.Name.Set(receivedUser.Name),
 		).Exec(c.Context())
 		if(err != nil){
 			fmt.Println("----error while adding new user in DB-----")

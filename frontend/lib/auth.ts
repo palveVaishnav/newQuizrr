@@ -50,7 +50,7 @@ export const NEXT_AUTH_CONFIG: NextAuthOptions = {
         },
 
         async redirect() {
-            return '/home'; // Redirect to /dashboard after successful login
+            return '/home'; //  after successful login
         },
     },
 };
