@@ -128,9 +128,7 @@ NEXT_PUBLIC_API="http://127.0.0.1:8080"
 - **Home page**: Placeholder page, not functional.
 - **Packs and Results**: Fully working.
 - **Tests**: Pixel-perfect design with functional testing and result viewing.
-- **Profile**: Uses sessions, not yet connected to the database (under development).
-- **Timer**: Currently not implemented.
-- **Final Question**: On the last question of the last section, click "Submit" instead of "Save and Next" (fix planned for next PR).
+- **Timer**: works, 
 - **No Payment Gateway**: Not implemented yet.
 
 

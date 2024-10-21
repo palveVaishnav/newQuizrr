@@ -41,7 +41,6 @@ export const NEXT_AUTH_CONFIG: NextAuthOptions = {
             // Check if session.user exists
             if (session.user) {
                 // Store the Google ID, email, name, and picture in the session object
-                session.user.id = token.id;
                 session.user.email = token.email;
                 session.user.name = token.name;
                 session.user.image = token.picture;
